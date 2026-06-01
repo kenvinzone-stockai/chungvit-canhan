@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#070d1a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>KenvinZone · Portfolio</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+</head>
+<body>
+<div id="root">
+
+<!-- ══════════════════════════════
+     AUTH SCREEN
+══════════════════════════════ -->
+<div id="auth-screen">
+
+  <!-- WELCOME -->
+  <div id="welcome-view" class="auth-card">
+    <div class="auth-brand">
+      <span class="auth-brand-icon">📊</span>
+      <div class="auth-brand-title">KENVINZONE</div>
+      <div class="auth-brand-sub">VNIndex · Portfolio Tracker</div>
+    </div>
+
+    <div id="user-quick-list" class="user-quick-list"></div>
+    <div id="auth-divider" class="auth-divider">hoặc</div>
+
+    <button class="auth-btn outline" type="button" onclick="showAuthView('login-view')">Đăng nhập tài khoản khác</button>
+    <button class="auth-btn primary" type="button" onclick="showAuthView('register-view')">+ Tạo tài khoản mới</button>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="login-view" class="auth-card hidden">
+    <button class="auth-back" type="button" onclick="showAuthView('welcome-view')">← Quay lại</button>
+    <div class="auth-brand">
+      <span class="auth-brand-icon" style="font-size:32px">🔐</span>
+      <div class="auth-brand-title" style="font-size:20px">Đăng nhập</div>
+    </div>
+    <input type="text"     id="login-username" class="auth-input" placeholder="Tên đăng nhập" autocomplete="username">
+    <input type="password" id="login-password" class="auth-input" placeholder="Mật khẩu" autocomplete="current-password">
+    <button id="login-btn" class="auth-btn primary" type="button">Đăng nhập</button>
+    <div id="login-err" class="auth-error hidden"></div>
+  </div>
+
+  <!-- REGISTER -->
+  <div id="register-view" class="auth-card hidden">
+    <button class="auth-back" type="button" onclick="showAuthView('welcome-view')">← Quay lại</button>
+    <div class="auth-brand">
+      <span class="auth-brand-icon" style="font-size:32px">✨</span>
+      <div class="auth-brand-title" style="font-size:20px">Tạo tài khoản</div>
+    </div>
+    <div id="avatar-grid" class="avatar-grid"></div>
+    <input type="text"     id="reg-displayname" class="auth-input" placeholder="Tên hiển thị (vd: Nguyễn Văn A)">
+    <input type="text"     id="reg-username"    class="auth-input" placeholder="Tên đăng nhập (vd: nguyenvana)" autocomplete="username">
+    <input type="password" id="reg-password"    class="auth-input" placeholder="Mật khẩu (tối thiểu 4 ký tự)" autocomplete="new-password">
+    <input type="password" id="reg-confirm"     class="auth-input" placeholder="Nhập lại mật khẩu">
+    <button id="reg-btn" class="auth-btn primary" type="button">Tạo tài khoản</button>
+    <div id="reg-err" class="auth-error hidden"></div>
+  </div>
+
+</div><!-- /auth-screen -->
+
+
+<!-- ══════════════════════════════
+     APP
+══════════════════════════════ -->
+<div id="app" class="hidden">
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-brand">
+      <span class="header-logo">📊</span>
+      <span class="header-title">KENVINZONE</span>
+    </div>
+    <button class="header-user" id="header-user" type="button">
+      <span class="header-user-avatar" id="header-avatar"></span>
+      <span class="header-user-name"   id="header-username"></span>
+    </button>
+  </header>
+
+  <!-- Tab content -->
+  <main class="tab-content">
+
+    <!-- ── TAB: VNINDEX ── -->
+    <div id="tab-vnindex" class="tab-pane active">
+
+      <!-- Index header -->
+      <div class="vni-header">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3)">VNINDEX · HoSE</div>
+          <div class="vni-time-badge"><span class="vni-time-dot"></span><span id="vni-time">--:--</span></div>
+        </div>
+        <div class="vni-index-val" id="vni-value">—</div>
+        <div class="vni-change" id="vni-change"></div>
+      </div>
+
+      <!-- Score section -->
+      <div class="card">
+        <div class="card-title">Score Chiến lược VNINDEX</div>
+        <div class="score-section">
+          <div class="gauge-wrap">
+            <svg class="gauge-svg" id="gauge-svg" width="96" height="96" viewBox="0 0 96 96">
+              <circle class="gauge-track" cx="48" cy="48" r="44"/>
+              <circle class="gauge-fill" id="gauge-fill" cx="48" cy="48" r="44"
+                stroke-dasharray="276.46" stroke-dashoffset="276.46"/>
+            </svg>
+            <div class="gauge-center">
+              <span class="gauge-score" id="gauge-score">0</span>
+              <span class="gauge-label">/ 100</span>
+            </div>
+          </div>
+          <div class="score-details">
+            <div id="signal-badge" class="signal-badge hold"><span class="signal-dot"></span>—</div>
+            <div id="score-bars" class="score-bars"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Market comment -->
+      <div class="card">
+        <div class="card-title">Nhận định thị trường nhanh</div>
+        <div class="market-comment" id="market-comment">Đang tải...</div>
+      </div>
+
+      <!-- Metrics grid -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">Thanh khoản HoSE</div>
+          <div class="metric-value up" id="m-liquidity">—</div>
+          <div class="metric-sub">VND</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Khối ngoại ròng</div>
+          <div class="metric-value" id="m-foreign">—</div>
+          <div class="metric-sub">Mua/Bán ròng</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Độ rộng TT</div>
+          <div class="metric-value up" id="m-breadth">—</div>
+          <div class="metric-sub">Tăng / Tổng CP</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Rủi ro Margin</div>
+          <div class="metric-value" id="m-margin">—</div>
+          <div class="metric-sub">Mức độ</div>
+        </div>
+      </div>
+
+      <!-- Signals -->
+      <div class="card">
+        <div class="card-title">Tín hiệu thị trường</div>
+        <div id="signals-list" class="signals-list"></div>
+      </div>
+
+      <!-- Sector strength -->
+      <div class="card">
+        <div class="card-title">Sức mạnh nhóm ngành</div>
+        <div id="sector-list" class="sector-list"></div>
+      </div>
+
+      <!-- Expert comment -->
+      <div class="card">
+        <div class="card-title">Ý kiến chuyên gia</div>
+        <div class="expert-box" id="expert-box"></div>
+      </div>
+
+      <div style="text-align:center;padding:8px 0 4px;font-size:11px;color:var(--text-3)">
+        Dữ liệu phân tích từ <a href="https://vnindex.kenvinzone.com" target="_blank" style="color:var(--green);text-decoration:none">vnindex.kenvinzone.com</a>
+      </div>
+
+    </div><!-- /tab-vnindex -->
+
+
+    <!-- ── TAB: DANH MỤC ── -->
+    <div id="tab-portfolio" class="tab-pane">
+
+      <div id="proxy-banner" class="proxy-banner warn hidden">
+        <span>⚠️</span>
+        <span class="proxy-banner-text">Đang dùng giá giả lập</span>
+        <button class="proxy-banner-btn" type="button" onclick="switchTab('settings')">Cài đặt</button>
+      </div>
+
+      <!-- Summary -->
+      <div class="portfolio-summary">
+        <div class="pf-total-label">Tổng tài sản</div>
+        <div class="pf-total-value" id="pf-total">0đ</div>
+        <div class="pf-pnl-row">
+          <div class="pf-pnl-item">
+            <div class="pf-pnl-label">Lãi / Lỗ</div>
+            <div class="pf-pnl-value flat" id="pf-pnl-val">0đ</div>
+          </div>
+          <div class="pf-pnl-item">
+            <div class="pf-pnl-label">% Lãi / Lỗ</div>
+            <div class="pf-pnl-value flat" id="pf-pnl-pct">0.00%</div>
+          </div>
+          <div class="pf-pnl-item">
+            <div class="pf-pnl-label">Vốn đầu tư</div>
+            <div class="pf-pnl-value" id="pf-cost" style="color:var(--text-2)">0đ</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stock list -->
+      <div id="stock-list" class="stock-list"></div>
+    </div><!-- /tab-portfolio -->
+
+
+    <!-- ── TAB: LỊCH SỬ ── -->
+    <div id="tab-history" class="tab-pane">
+
+      <div class="history-filter">
+        <button class="filter-chip active" data-filter="ALL" type="button">Tất cả</button>
+        <button class="filter-chip" data-filter="BUY"          type="button">🟢 Mua</button>
+        <button class="filter-chip" data-filter="SELL"         type="button">🔴 Bán</button>
+        <button class="filter-chip" data-filter="TAKE_PROFIT"  type="button">⭐ Chốt lời</button>
+      </div>
+
+      <div id="tx-list" class="tx-list"></div>
+    </div><!-- /tab-history -->
+
+
+    <!-- ── TAB: CÀI ĐẶT ── -->
+    <div id="tab-settings" class="tab-pane">
+
+      <!-- User info -->
+      <div class="settings-section">
+        <div class="settings-user-card">
+          <span class="settings-user-avatar" id="settings-avatar">🐯</span>
+          <div>
+            <div class="settings-user-name" id="settings-name">—</div>
+            <div class="settings-user-handle" id="settings-handle">—</div>
+          </div>
+        </div>
+        <button class="settings-row" type="button" onclick="openChangePassword()">
+          <span class="settings-row-icon">🔑</span>
+          <div class="settings-row-text">
+            <div class="settings-row-label">Đổi mật khẩu</div>
+          </div>
+          <span class="settings-row-action">›</span>
+        </button>
+        <button class="settings-row" type="button" onclick="confirmLogout()">
+          <span class="settings-row-icon">🚪</span>
+          <div class="settings-row-text">
+            <div class="settings-row-label">Đăng xuất</div>
+          </div>
+          <span class="settings-row-action">›</span>
+        </button>
+      </div>
+
+      <!-- Proxy / Giá realtime -->
+      <div class="settings-section">
+        <div class="settings-section-title">Kết nối giá Realtime</div>
+
+        <div class="settings-input-wrap">
+          <div class="proxy-status-row">
+            <span class="status-dot idle" id="proxy-dot"></span>
+            <span class="status-text"    id="proxy-dot-text">Chưa cấu hình</span>
+          </div>
+          <label class="settings-label-sm">Google Apps Script Proxy URL</label>
+          <input type="url" id="gas-url-input" class="settings-input"
+            placeholder="https://script.google.com/macros/s/.../exec">
+          <div class="settings-input-row">
+            <button class="btn-sm" type="button" onclick="testProxy()" style="flex:1">🔍 Test</button>
+            <button class="btn-sm primary" type="button" onclick="saveProxyUrl()" style="flex:1">💾 Lưu</button>
+          </div>
+
+          <!-- GAS Setup guide -->
+          <details style="margin-top:8px">
+            <summary style="font-size:12px;color:var(--text-3);cursor:pointer;user-select:none">
+              📖 Hướng dẫn setup GAS Proxy (miễn phí)
+            </summary>
+            <div style="font-size:12px;color:var(--text-3);line-height:1.7;margin-top:8px;padding:10px;background:var(--bg-input);border-radius:8px">
+              <strong style="color:var(--text-2)">Bước 1:</strong> Vào
+              <a href="https://script.google.com" target="_blank" style="color:var(--green)">script.google.com</a>
+              → New project<br>
+              <strong style="color:var(--text-2)">Bước 2:</strong> Paste code proxy vào editor (xem README)<br>
+              <strong style="color:var(--text-2)">Bước 3:</strong> Deploy → Web app → <em>Anyone</em> → Deploy<br>
+              <strong style="color:var(--text-2)">Bước 4:</strong> Copy URL → paste vào ô trên → Lưu<br><br>
+              <span style="color:var(--orange)">⚡ Miễn phí, không giới hạn, không cần API key</span>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- Data management -->
+      <div class="settings-section">
+        <div class="settings-section-title">Dữ liệu</div>
+        <button class="settings-row" type="button" onclick="exportData()">
+          <span class="settings-row-icon">💾</span>
+          <div class="settings-row-text">
+            <div class="settings-row-label">Xuất dữ liệu (Backup)</div>
+            <div class="settings-row-sub">Tải file JSON về máy</div>
+          </div>
+          <span class="settings-row-action">›</span>
+        </button>
+        <button class="settings-row" type="button" onclick="importData()">
+          <span class="settings-row-icon">📂</span>
+          <div class="settings-row-text">
+            <div class="settings-row-label">Nhập dữ liệu (Restore)</div>
+            <div class="settings-row-sub">Khôi phục từ file JSON</div>
+          </div>
+          <span class="settings-row-action">›</span>
+        </button>
+      </div>
+
+      <!-- Danger zone -->
+      <div class="settings-section">
+        <div class="settings-section-title">Vùng nguy hiểm</div>
+        <button class="settings-row danger" type="button" onclick="confirmDeleteAccount()">
+          <span class="settings-row-icon">🗑️</span>
+          <div class="settings-row-text">
+            <div class="settings-row-label">Xóa tài khoản</div>
+            <div class="settings-row-sub">Xóa toàn bộ dữ liệu, không thể khôi phục</div>
+          </div>
+          <span class="settings-row-action">›</span>
+        </button>
+      </div>
+
+      <div style="text-align:center;padding:16px 0;font-size:11px;color:var(--text-3)">
+        KenvinZone Portfolio v2.0<br>
+        <a href="https://vnindex.kenvinzone.com" target="_blank" style="color:var(--green);text-decoration:none">vnindex.kenvinzone.com</a>
+      </div>
+
+    </div><!-- /tab-settings -->
+
+  </main>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-tab="vnindex" type="button">
+      <span class="nav-icon">📈</span>
+      <span class="nav-label">VNINDEX</span>
+    </button>
+    <button class="nav-btn" data-tab="portfolio" type="button">
+      <span class="nav-icon">💼</span>
+      <span class="nav-label">Danh mục</span>
+    </button>
+    <button class="nav-btn" data-tab="history" type="button">
+      <span class="nav-icon">📋</span>
+      <span class="nav-label">Lịch sử</span>
+    </button>
+    <button class="nav-btn" data-tab="settings" type="button">
+      <span class="nav-icon">⚙️</span>
+      <span class="nav-label">Cài đặt</span>
+    </button>
+  </nav>
+
+  <!-- FAB add stock (only visible on portfolio tab) -->
+  <button id="add-fab" class="add-fab" type="button" onclick="openAddModal()" title="Thêm cổ phiếu">＋</button>
+
+</div><!-- /app -->
+
+
+<!-- ══════════════════════════════
+     MODALS
+══════════════════════════════ -->
+
+<!-- Add/Edit Stock -->
+<div id="stock-modal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal('stock-modal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="stock-modal-title">Thêm cổ phiếu</div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label class="form-label">Mã CK *</label>
+        <input type="text" id="sm-symbol" class="form-input" placeholder="VCB" maxlength="10" style="text-transform:uppercase">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Tên công ty</label>
+        <input type="text" id="sm-name" class="form-input" placeholder="Vietcombank">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label class="form-label">Số lượng (CP) *</label>
+        <input type="number" id="sm-qty" class="form-input" placeholder="1000" min="1">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Giá vốn (đ/CP) *</label>
+        <input type="number" id="sm-cost" class="form-input" placeholder="85000" min="1">
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="form-label">Ngày mua</label>
+      <input type="date" id="sm-date" class="form-input">
+    </div>
+    <div class="form-field">
+      <label class="form-label">Ghi chú</label>
+      <input type="text" id="sm-note" class="form-input" placeholder="Tuỳ chọn...">
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-sm" type="button" onclick="closeModal('stock-modal')" style="flex:1">Huỷ</button>
+      <button class="btn-sm primary" type="button" id="sm-save" style="flex:2">Lưu</button>
+    </div>
+  </div>
+</div>
+
+<!-- Sell / Take Profit -->
+<div id="sell-modal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal('sell-modal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Bán / Chốt lời — <span id="sell-symbol" style="color:var(--green)"></span></div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label class="form-label">Số lượng bán (CP)</label>
+        <input type="number" id="sell-qty" class="form-input" min="1">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Giá bán (đ/CP)</label>
+        <input type="number" id="sell-price" class="form-input" min="1">
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="form-label">Ngày bán</label>
+      <input type="date" id="sell-date" class="form-input">
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-sm" type="button" onclick="closeModal('sell-modal')" style="flex:1">Huỷ</button>
+      <button class="btn-sm primary" type="button" id="sell-save" style="flex:2">Xác nhận bán</button>
+    </div>
+  </div>
+</div>
+
+<!-- Change Password -->
+<div id="chpw-modal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal('chpw-modal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Đổi mật khẩu</div>
+    <div class="form-field">
+      <label class="form-label">Mật khẩu hiện tại</label>
+      <input type="password" id="chpw-old" class="form-input" placeholder="••••••">
+    </div>
+    <div class="form-field">
+      <label class="form-label">Mật khẩu mới</label>
+      <input type="password" id="chpw-new" class="form-input" placeholder="Tối thiểu 4 ký tự">
+    </div>
+    <div class="form-field">
+      <label class="form-label">Nhập lại mật khẩu mới</label>
+      <input type="password" id="chpw-confirm" class="form-input" placeholder="••••••">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-sm" type="button" onclick="closeModal('chpw-modal')" style="flex:1">Huỷ</button>
+      <button class="btn-sm primary" type="button" onclick="saveChangePassword()" style="flex:2">Đổi mật khẩu</button>
+    </div>
+  </div>
+</div>
+
+<!-- Show/hide FAB based on active tab -->
+<script>
+  // Show FAB only on portfolio tab
+  const _origSwitch = typeof switchTab !== 'undefined' ? switchTab : null;
+  document.addEventListener('DOMContentLoaded', () => {
+    const fab = document.getElementById('add-fab');
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        fab.style.display = btn.dataset.tab === 'portfolio' ? 'flex' : 'none';
+      });
+    });
+    fab.style.display = 'none'; // hidden by default, vnindex is first tab
+  });
+</script>
+
+</div><!-- /root -->
+
+<script src="js/auth.js"></script>
+<script src="js/api.js"></script>
+<script src="js/store.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
