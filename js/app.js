@@ -646,7 +646,7 @@ async function testProxy() {
   try {
     const item = await API.testProxy(url);
     dot.className = 'status-dot ok';
-    text.textContent = `✅ Kết nối OK · VCB = ${item.lastPrice?.toLocaleString('vi-VN')}đ`;
+    text.textContent = `✅ Kết nối OK · VCB = ${item.price?.toLocaleString('vi-VN')}đ`;
     API.clearCache();
     showToast('Kết nối thành công!');
   } catch(e) {
